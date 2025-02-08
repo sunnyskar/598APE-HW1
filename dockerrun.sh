@@ -1,1 +1,1 @@
-docker run -it -v `pwd`:/host wsmoses/598ape /bin/bash
+docker run -it -v `pwd`:/host dhanker2/cs598ape /bin/bash

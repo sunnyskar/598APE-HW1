@@ -10,10 +10,14 @@ RUN apt-get -y update && apt-get install -y --no-install-recommends curl gnupg s
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
+
+
 RUN update-alternatives --install /usr/bin/clang clang /usr/bin/clang-19 10 --slave /usr/bin/clang++ clang++ /usr/bin/clang++-19 \
     && update-alternatives --install /usr/bin/opt opt /usr/bin/opt-19 10 \
     && update-alternatives --install /usr/bin/lld lld /usr/bin/lld-19 10 \
     && update-alternatives --install /usr/bin/llvm-symbolizer llvm-symbolizer /usr/bin/llvm-symbolizer-19 10
+
+RUN apt update
 
 RUN ln -s /usr/bin/convert /usr/bin/magick
 
