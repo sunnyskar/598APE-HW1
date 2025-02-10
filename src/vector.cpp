@@ -81,12 +81,29 @@ Vector Vector::normalize(){
 }
 
   
-Vector solveScalers(Vector v1, Vector v2, Vector v3, Vector C){
-   double denom = v1.z*v2.y*v3.x-v1.y*v2.z*v3.x-v1.z*v2.x*v3.y+v1.x*v2.z*v3.y+v1.y*v2.x*v3.z-v1.x*v2.y*v3.z;
-   double a = C.z*v2.y*v3.x-C.y*v2.z*v3.x-C.z*v2.x*v3.y+C.x*v2.z*v3.y+C.y*v2.x*v3.z-C.x*v2.y*v3.z;
-   double b = -C.z*v1.y*v3.x+C.y*v1.z*v3.x+C.z*v1.x*v3.y-C.x*v1.z*v3.y-C.y*v1.x*v3.z+C.x*v1.y*v3.z;
-   double c = C.z*v1.y*v2.x-C.y*v1.z*v2.x-C.z*v1.x*v2.y+C.x*v1.z*v2.y+C.y*v1.x*v2.z-C.x*v1.y*v2.z;
-   return Vector(a/denom, b/denom, c/denom);
+Vector solveScalers(const Vector v1, const Vector v2, Vector v3, Vector C) {
+    // Precompute shared terms
+    const double v1x_v2y = v1.x * v2.y;
+    const double v1y_v2x = v1.y * v2.x;
+    const double v1y_v2z = v1.y * v2.z;
+    const double v1z_v2y = v1.z * v2.y;
+    const double v1x_v2z = v1.x * v2.z;
+    const double v1z_v2x = v1.z * v2.x;
+
+    const double denom = fma(v1z_v2y, v3.x, 
+                    fma(-v1y_v2z, v3.x,
+                    fma(v1x_v2z, v3.y,
+                    fma(-v1z_v2x, v3.y,
+                    fma(v1y_v2x, v3.z,
+                        -v1x_v2y * v3.z)))));
+
+    // Numerator calculations using precomputed terms
+    const double a = C.z * v2.y * v3.x - C.y * v2.z * v3.x - C.z * v2.x * v3.y + C.x * v2.z * v3.y + C.y * v2.x * v3.z - C.x * v2.y * v3.z;
+    const double b = -C.z * v1.y * v3.x + C.y * v1.z * v3.x + C.z * v1.x * v3.y - C.x * v1.z * v3.y - C.y * v1.x * v3.z + C.x * v1.y * v3.z;
+    const double c = C.z * v1y_v2x - C.y * v1z_v2x - C.z * v1x_v2y + C.x * v1z_v2y + C.y * v1x_v2z - C.x * v1y_v2z;
+    const double inv_denom = 1.0 / denom;
+    return Vector(a * inv_denom, b * inv_denom, c * inv_denom);
 }
+
 
 Ray::Ray(const Vector& po, const Vector& ve): point(po), vector(ve){}

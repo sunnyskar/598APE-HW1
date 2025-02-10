@@ -50,20 +50,28 @@ void insertionSort(TimeAndShape *arr, int n) {
 
 void calcColor(unsigned char* toFill,Autonoma* c, Ray ray, unsigned int depth){
    ShapeNode* t = c->listStart;
-   TimeAndShape *times = (TimeAndShape*)malloc(0);
+   TimeAndShape* times = (TimeAndShape*)malloc(sizeof(TimeAndShape) * 100);
    size_t seen = 0;
-   while(t!=NULL){
+   size_t capacity = 4;
+
+   while (t != NULL) {
       double time = t->data->getIntersection(ray);
 
-      TimeAndShape *times2 = (TimeAndShape*)malloc(sizeof(TimeAndShape)*(seen + 1));
-      for (int i=0; i<seen; i++)
-         times2[i] = times[i];
-      times2[seen] = (TimeAndShape){ time, t->data };
-      free(times);
-      times = times2;
-      seen ++;
-      t = t->next;
-   }
+    // Resize if necessary
+      if (seen == capacity) {
+         capacity *= 2; // Double the capacity
+         TimeAndShape* newTimes = (TimeAndShape*)realloc(times, sizeof(TimeAndShape) * capacity);
+         if (!newTimes) {
+            free(times); // Handle allocation failure
+            return;
+        }
+        times = newTimes;
+    }
+
+    // Add new element
+    times[seen++] = (TimeAndShape){ time, t->data };
+    t = t->next;
+}
    insertionSort(times, seen);
    if (seen == 0 || times[0].time == inf) {
       double opacity, reflection, ambient;
