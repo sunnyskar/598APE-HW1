@@ -52,6 +52,8 @@ void calcColor(unsigned char* toFill,Autonoma* c, Ray ray, unsigned int depth){
    ShapeNode* t = c->listStart;
    TimeAndShape* times = (TimeAndShape*)malloc(sizeof(TimeAndShape) * 100);
    size_t seen = 0;
+
+   //OPTIMIZATION: Using a dynamic array to store the times and shapes
    size_t capacity = 4;
 
    while (t != NULL) {
