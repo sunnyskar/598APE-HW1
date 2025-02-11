@@ -8,14 +8,13 @@
 #include<limits>
 #define inf std::numeric_limits<double>::infinity()
 
-class Vector{
+class Vector {
 public:
   double x, y, z;
+    
   Vector(double a, double b, double c);
-  
-  
-  void operator +=(const Vector);
-  void operator -= (const Vector);
+  void operator +=(const Vector& rhs);
+  void operator -= (const Vector& rhs);
   void operator *= (const double);
   void operator *= (const float);
   void operator *= (const int);
@@ -23,8 +22,8 @@ public:
   void operator /= (const float);
   void operator /= (const int);
   
-  Vector operator + (const Vector);
-  Vector operator - (const Vector);
+  Vector operator + (const Vector& rhs);
+  Vector operator - (const Vector& rhs);
 /*  Vector operator * (const Vector);*/
   Vector operator * (const double);
   Vector operator * (const float);
@@ -32,10 +31,10 @@ public:
   Vector operator / (const double);
   Vector operator / (const float);
   Vector operator / (const int);
-  Vector cross(const Vector a);
+  Vector cross(const Vector& a);
   double mag2();
   double mag();
-  double dot(const Vector a);
+  double dot(const Vector& a);
   Vector normalize();
 } ;
 
@@ -45,39 +44,39 @@ public:
   Ray(const Vector& po, const Vector& ve);
 };
 
-  inline Vector operator-(const Vector b){
+  inline Vector operator-(const Vector& b){
    return Vector(-b.x,-b.y,-b.z);
   }
   
-  inline Vector operator+(const Vector b){
+  inline Vector operator+(const Vector& b){
    return b;
   }
   
-  inline Vector operator*(const int a, const Vector b){
+  inline Vector operator*(const int a, const Vector& b){
    return Vector(a*b.x,a*b.y,a*b.z);
   }
 
-  inline Vector operator*(const double a, const Vector b){
+  inline Vector operator*(const double a, const Vector& b){
    return Vector(a*b.x,a*b.y,a*b.z);
   }
 
-  inline Vector operator*(const float a, const Vector b){
+  inline Vector operator*(const float a, const Vector& b){
    return Vector(a*b.x,a*b.y,a*b.z);
   }
 
-  inline Vector operator/(const int a, const Vector b){
+  inline Vector operator/(const int a, const Vector& b){
    return Vector(a/b.x,a/b.y,a/b.z);
   }
 
-  inline Vector operator/(const double a, const Vector b){
+  inline Vector operator/(const double a, const Vector& b){
    return Vector(a/b.x,a/b.y,a/b.z);
   }
 
-  inline Vector operator/(const float a, const Vector b){
+  inline Vector operator/(const float a, const Vector& b){
    return Vector(a/b.x,a/b.y,a/b.z);
   }
   
-  Vector solveScalers(Vector v1, Vector v2, Vector v3, Vector solve);
+  Vector solveScalers(const Vector& v1, const Vector& v2, const Vector& v3, const Vector& solve);
 
 int print_vector(FILE *stream, const struct printf_info *info, const void 
 *const *args);
