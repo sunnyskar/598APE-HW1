@@ -3,7 +3,8 @@ output := -o
 copt := -c 
 SRC_DIR := ./
 OBJ_DIR := ./
-FLAGS := -O0 -g -Werror
+# optimization level 3
+FLAGS := -O3 -g -Werror
 
 CPP_FILES := $(wildcard *.cpp)
 OBJ_FILES := $(addprefix $(OBJ_DIR),$(notdir $(CPP_FILES:.cpp=.obj)))
