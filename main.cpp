@@ -47,13 +47,13 @@ void set(int i, int j, unsigned char r, unsigned char g, unsigned char b){
    DATA[3*(i+j*W)+2] = b; 
 }
 
-void refresh(Autonoma* c){
+void refresh(Autonoma* c, BVH* bvh){
    // parallelize this loop
    #pragma omp parallel for
    for(int n = 0; n<H*W; ++n) 
    { 
       Vector ra = c->camera.forward+((double)(n%W)/W-.5)*((c->camera.right))+(.5-(double)(n/W)/H)*((c->camera.up));
-      calcColor(&DATA[3*n], c, Ray(c->camera.focus, ra), 0);
+      calcColor(&DATA[3*n], c, bvh, Ray(c->camera.focus, ra), 0);
    }
 }
 
@@ -353,7 +353,7 @@ double cosfn(double x, double from, double to) {
    return (to - from) * cos(x * 6.28) + from;
 }
 
-void setFrame(const char* animateFile, Autonoma* MAIN_DATA, int frame, int frameLen) {
+void setFrame(const char* animateFile, Autonoma* MAIN_DATA, int frame, int frameLen, BVH* bvh) {
    if (animateFile) {
       char object_type[80];
       char transition_type[80];
@@ -437,7 +437,7 @@ void setFrame(const char* animateFile, Autonoma* MAIN_DATA, int frame, int frame
       }
    }
 
-   refresh(MAIN_DATA);
+   refresh(MAIN_DATA, bvh);
 }
 
 int main(int argc, const char** argv){
@@ -534,6 +534,7 @@ int main(int argc, const char** argv){
    }
 
    Autonoma* MAIN_DATA = createInputs(inFile);
+   BVH* bvh = new BVH(MAIN_DATA->listStart);
    
    int frame;
    char command[200];
@@ -541,7 +542,7 @@ int main(int argc, const char** argv){
   struct timeval start, end;
    gettimeofday(&start, NULL);
    for(frame = 0; frame<frameLen; frame++) {
-      setFrame(animateFile, MAIN_DATA, frame, frameLen);      
+      setFrame(animateFile, MAIN_DATA, frame, frameLen, bvh);      
       if (frameLen == 1) {
          snprintf(command, sizeof(command), "%s", outFile);    
       } else if (png) {
@@ -568,6 +569,7 @@ int main(int argc, const char** argv){
       }
       return system(command);
    }   
+   delete bvh;
    return 0;
    
 }

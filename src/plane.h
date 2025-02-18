@@ -2,6 +2,7 @@
 #define __PLANE_H__
 
 #include "shape.h"
+#include "bvh.h"
 
 class Plane : public Shape{
 public:
@@ -18,6 +19,7 @@ public:
   void setYaw(double d);
   void setPitch(double d);
   void setRoll(double d);
+  AABB getBounds() const override;
 };
 
 #endif

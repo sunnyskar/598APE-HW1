@@ -29,3 +29,36 @@ bool Box::getLightIntersection(Ray ray, double* fill){
    fill[2]*=temp[2]/255.;
    return false;
 }
+
+AABB Box::getBounds() const {
+    // Calculate the eight corners of the box
+    std::vector<Vector> corners(8, Vector(0,0,0));
+    Vector halfWidth = right * (textureX / 2);
+    Vector halfHeight = up * (textureY / 2);
+    Vector halfDepth = vect * 0.001; // Small thickness for the box
+
+    // Front face corners
+    corners[0] = center - halfWidth - halfHeight + halfDepth;
+    corners[1] = center + halfWidth - halfHeight + halfDepth;
+    corners[2] = center - halfWidth + halfHeight + halfDepth;
+    corners[3] = center + halfWidth + halfHeight + halfDepth;
+
+    // Back face corners
+    corners[4] = center - halfWidth - halfHeight - halfDepth;
+    corners[5] = center + halfWidth - halfHeight - halfDepth;
+    corners[6] = center - halfWidth + halfHeight - halfDepth;
+    corners[7] = center + halfWidth + halfHeight - halfDepth;
+
+    // Find the minimum and maximum points
+    Vector min(std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
+    Vector max(std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest());
+
+    for (int i = 0; i < 8; ++i) {
+        min = Vector::min(min, corners[i]);
+        max = Vector::max(max, corners[i]);
+    }
+
+    // Add padding for numerical precision
+    Vector padding(1e-4, 1e-4, 1e-4);
+    return AABB(min - padding, max + padding);
+}

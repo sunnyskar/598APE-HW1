@@ -4,7 +4,7 @@ copt := -c
 SRC_DIR := ./
 OBJ_DIR := ./
 # optimization level 3
-FLAGS := -O3 -g -Werror
+FLAGS := -O3 -g -Werror -ffast-math -march=native -fopenmp
 
 CPP_FILES := $(wildcard *.cpp)
 OBJ_FILES := $(addprefix $(OBJ_DIR),$(notdir $(CPP_FILES:.cpp=.obj)))
@@ -58,6 +58,10 @@ $(OBJ_DIR)pictbox.obj: $(SRC_DIR)pictbox.cpp $(SRC_DIR)pictbox.h $(OBJ_DIR)box.o
 
 $(OBJ_DIR)disk.obj: $(SRC_DIR)disk.cpp $(SRC_DIR)disk.h $(OBJ_DIR)/plane.obj
 	$(FUNC) $(output)$(OBJ_DIR)disk.obj $(copt) $(SRC_DIR)disk.cpp $(FLAGS)
+
+
+$(OBJ_DIR)bvh.obj: $(SRC_DIR)bvh.cpp $(SRC_DIR)bvh.h
+	$(FUNC) $(output)$(OBJ_DIR)bvh.obj $(copt) $(SRC_DIR)bvh.cpp $(FLAGS)
 
 clean:
 	cd Textures && make clean

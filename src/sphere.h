@@ -1,7 +1,7 @@
 #ifndef __SPHERE_H__
 #define __SPHERE_H__
 #include "shape.h"
-
+#include "bvh.h"
 class Sphere : public Shape{
 public:
   double radius;
@@ -16,5 +16,6 @@ public:
   void setYaw(double a);
   void setPitch(double b);
   void setRoll(double c);
+  AABB getBounds() const override;
 };
 #endif

@@ -22,16 +22,21 @@ public:
   void operator /= (const float);
   void operator /= (const int);
   
-  Vector operator + (const Vector& rhs);
-  Vector operator - (const Vector& rhs);
-/*  Vector operator * (const Vector);*/
-  Vector operator * (const double);
-  Vector operator * (const float);
-  Vector operator * (const int);
-  Vector operator / (const double);
-  Vector operator / (const float);
-  Vector operator / (const int);
-  Vector cross(const Vector& a);
+  Vector operator + (const Vector& rhs) const;
+  Vector operator - (const Vector& rhs) const;
+  Vector operator * (const Vector) const;
+  Vector operator * (const double) const;
+  Vector operator * (const float) const;
+  Vector operator * (const int) const;
+  Vector operator / (const double) const;
+  Vector operator / (const float) const;
+  Vector operator / (const int) const;
+  double operator[](int index) const;
+  Vector cross(const Vector& a) const;
+
+  static Vector min(const Vector& a, const Vector& b);
+  static Vector max(const Vector& a, const Vector& b);
+
   double mag2();
   double mag();
   double dot(const Vector& a);
@@ -75,6 +80,7 @@ public:
   inline Vector operator/(const float a, const Vector& b){
    return Vector(a/b.x,a/b.y,a/b.z);
   }
+  
   
   Vector solveScalers(const Vector& v1, const Vector& v2, const Vector& v3, const Vector& solve);
 
