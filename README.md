@@ -5,7 +5,7 @@
 - Pulling the code:
 
 ```bash
-git clone https://github.com/dhanker2/598APE-HW1.git
+git clone https://github.com/sunnyskar/598APE-HW1.git
 ```
 
 - Start off with docker installed.
@@ -30,12 +30,12 @@ cd host/
 
 
 ## Run the program
-The branch that the program is on has only the parallelization optimizations. If you want to test the bvh optimization, you will need to checkout the branch as defined below.
+The branch that the program is on has the latest optimizations. You can test specific steps of optimizations by checking out the branch as defined below. 
 
 - Build the project with the following command:
 
 ```bash
-make clean && make - j
+make clean && make -j
 ```
 
 
@@ -73,12 +73,12 @@ git checkout 648505a824f162b215332a184c0b0a3b9c56dd9e
 
 - Parallelization Optimizations:
 ```bash
-git checkout main
+git checkout 3a6fe909f524f81dadab12959bb652dfb06bdd59
 ```
 
 - BVH Optimizations:
 ```bash
-git checkout bvh
+git checkout main
 ```
 
 
