@@ -4,7 +4,7 @@ copt := -c
 SRC_DIR := ./
 OBJ_DIR := ./
 # optimization level 3
-FLAGS := -O3 -g -Werror
+FLAGS := -O3 -g -Werror -ffast-math -march=native -fopenmp
 
 CPP_FILES := $(wildcard *.cpp)
 OBJ_FILES := $(addprefix $(OBJ_DIR),$(notdir $(CPP_FILES:.cpp=.obj)))
