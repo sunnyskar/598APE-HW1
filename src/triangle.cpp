@@ -67,3 +67,29 @@ bool Triangle::getLightIntersection(Ray ray, double* fill){
    fill[2]*=temp[2]/255.;
    return false;
 }
+
+AABB Triangle::getBounds() const {
+    // Get the three vertices of the triangle relative to center
+    Vector vertices[3] = {
+        center,                              // First vertex
+        center + right * textureX,          // Second vertex
+        center + right * thirdX + up * textureY  // Third vertex
+    };
+    
+    Vector thickness = vect * 0.001;
+    
+    Vector min(std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
+    Vector max(std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest());
+    
+    // Consider both front and back faces
+    for (int i = 0; i < 3; ++i) {
+        min = Vector::min(min, vertices[i] + thickness);
+        max = Vector::max(max, vertices[i] + thickness);
+        min = Vector::min(min, vertices[i] - thickness);
+        max = Vector::max(max, vertices[i] - thickness);
+    }
+    
+    Vector padding(1e-4, 1e-4, 1e-4);
+    return AABB(min - padding, max + padding);
+}
+

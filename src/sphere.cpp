@@ -1,4 +1,5 @@
 #include "sphere.h"
+#include "bvh.h"
 
 Sphere::Sphere(const Vector &c, Texture* t, double ya, double pi, double ro, double rad): Shape(c, t, ya, pi, ro){
   textureX = textureY = 1.;
@@ -51,6 +52,10 @@ void Sphere::getColor(unsigned char* toFill, double* amb, double* op, double* re
    double data3 = (center.y-ray.point.y+radius)/(2*radius);
    double data2 = atan2( ray.point.z-center.z, ray.point.x-center.x);
    texture->getColor(toFill, amb, op, ref,fix((yaw+data2)/M_TWO_PI/textureX),fix((pitch/M_TWO_PI-(data3))/textureY));
+
+}
+AABB Sphere::getBounds() const {
+   return AABB(center - Vector(radius, radius, radius), center + Vector(radius, radius, radius));
 }
 Vector Sphere::getNormal(Vector point){
    Vector vect = point-center;

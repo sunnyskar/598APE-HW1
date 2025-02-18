@@ -3,10 +3,11 @@
 void ImageTexture::getColor(unsigned char* toFill, double* am, double *op, double *ref, double x, double y){
    int xi = (int)(x*w), yi = (int)(y*h);
    int p1 = 4*(xi+w*yi);
-   toFill[0] = imageData[p1];
-   toFill[1] = imageData[p1+1];
-   toFill[2] = imageData[p1+2];
-   *op = imageData[p1+3]*opacity/255.;
+   unsigned char* image = imageData + p1;
+   toFill[0] = image[0];
+   toFill[1] = image[1];
+   toFill[2] = image[2];
+   *op = image[3]*opacity/255.0;
    *ref = reflection;
    *am = ambient;
 }

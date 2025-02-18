@@ -1,6 +1,7 @@
 #ifndef __SHAPE_H__
 #define __SHAPE_H__
 #include "light.h"
+#include "bvh.h"
 
 class Shape{
   public:
@@ -12,6 +13,7 @@ class Shape{
    Texture* normalMap;
    virtual double getIntersection(Ray ray) = 0;
    virtual bool getLightIntersection(Ray ray, double* fill) = 0;
+   virtual AABB getBounds() const = 0;
    virtual void move() = 0;
    virtual unsigned char reversible() = 0;
    virtual void getColor(unsigned char* toFill, double* am, double* op, double* ref, Autonoma* r, Ray ray, unsigned int depth) = 0;
@@ -22,6 +24,6 @@ class Shape{
    virtual void setRoll(double d) = 0;
 };
 
-void calcColor(unsigned char* toFill, Autonoma*, Ray ray, unsigned int depth);
+void calcColor(unsigned char* toFill, Autonoma*, BVH* bvh, Ray ray, unsigned int depth);
 
 #endif

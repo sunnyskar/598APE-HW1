@@ -98,6 +98,47 @@ bool Plane::getLightIntersection(Ray ray, double* fill){
    return false;
 }
 
+AABB Plane::getBounds() const {
+    const double LARGE_SIZE = 10000.0;
+    
+    // Calculate the plane's normal vector (vect) and its perpendicular vectors (right, up)
+    // These are already calculated in setAngles() and stored in the class
+    
+    // For an infinite plane, we need to extend in both directions perpendicular to the normal
+    Vector u = right * LARGE_SIZE;
+    Vector v = up * LARGE_SIZE;
+    
+    // Calculate eight corners of the extended plane space
+    std::vector<Vector> corners(8, Vector(0,0,0));
+    
+    // Front face (in normal direction)
+    corners[0] = center - u - v;
+    corners[1] = center + u - v;
+    corners[2] = center - u + v;
+    corners[3] = center + u + v;
+    
+    // Back face (opposite to normal direction)
+    Vector normalOffset = vect * 0.001; // Small thickness
+    for(int i = 0; i < 4; i++) {
+        corners[i + 4] = corners[i] - normalOffset;
+        corners[i] = corners[i] + normalOffset;
+    }
+    
+    // Find the minimum and maximum points
+    Vector min(std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
+    Vector max(std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest());
+    
+    for (int i = 0; i < 8; i++) {
+        min = Vector::min(min, corners[i]);
+        max = Vector::max(max, corners[i]);
+    }
+    
+    // Add padding for numerical precision
+    Vector padding(1e-4, 1e-4, 1e-4);
+    return AABB(min - padding, max + padding);
+}
+
+
 void Plane::move(){
    d = -vect.dot(center);
 }
