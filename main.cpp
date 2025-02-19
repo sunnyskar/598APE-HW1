@@ -57,6 +57,19 @@ void refresh(Autonoma* c, BVH* bvh){
    }
 }
 
+// void refresh(Autonoma* c, BVH* bvh, int frame){
+//    // parallelize this loop
+//    #pragma omp parallel for
+//    for(int n = 0; n < H * W; ++n) 
+//    { 
+//       // Check if the pixel is in the odd or even set based on the frame number
+//       if ((n % 2 == frame % 2)) {
+//          Vector ra = c->camera.forward + ((double)(n % W) / W - .5) * (c->camera.right) + (.5 - (double)(n / W) / H) * (c->camera.up);
+//          calcColor(&DATA[3 * n], c, bvh, Ray(c->camera.focus, ra), 0);
+//       }
+//    }
+// }
+
 void outputPPM(FILE* f){
    fprintf(f, "P6 %d %d 255 ", W, H);
    fwrite(DATA, 1, W*H * 3, f);
@@ -438,6 +451,8 @@ void setFrame(const char* animateFile, Autonoma* MAIN_DATA, int frame, int frame
    }
 
    refresh(MAIN_DATA, bvh);
+   //refresh(MAIN_DATA, bvh, frame);
+
 }
 
 int main(int argc, const char** argv){
